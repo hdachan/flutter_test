@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'Conut.dart';
-
+import 'map_state.dart'; // MapState 클래스를 import합니다.
+import 'your_widget.dart'; // YourWidget 클래스를 import합니다.
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => Counter(),
+    MultiProvider( // 여러 Provider를 사용할 때 MultiProvider 사용
+      providers: [
+        ChangeNotifierProvider(create: (context) => Counter()),
+        ChangeNotifierProvider(create: (context) => MapState()), // MapState 추가
+      ],
       child: MyApp(),
     ),
   );
@@ -17,57 +21,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: YourWidget(),
-    );
-  }
-}
-
-class YourWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Provider Test"),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(30.0),
-              child: Text(
-                "Count",
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-            Consumer<Counter>(
-              builder: (context, counter, child) {
-                return Text(
-                  '${counter.count}',
-                  style: TextStyle(fontSize: 40),
-                );
-              },
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Provider.of<Counter>(context, listen: false).increment();
-                  },
-                  child: const Text("+"),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    Provider.of<Counter>(context, listen: false).decrement();
-                  },
-                  child: const Text("-"),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
